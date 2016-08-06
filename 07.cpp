@@ -6,7 +6,8 @@
 #include <cctype>
 #include "logger.h"
 
-//coverts from any to any 
+//Это решение сразу задач 7 и 8. Преобразует из любой системы счисления в любую систему счисления
+//converts from any to any 
 
 #define N 50
 int power(int x, int y) {
