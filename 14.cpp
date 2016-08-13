@@ -13,7 +13,7 @@ void insertionSort(int array[], size_t size) {
   }
 }
 
-void printArray(int array[ ], size_t size) {
+void printArray(int array[], size_t size) {
   printf("(");
   const char* delimiter = "";
   for (int i = 0; i < size; ++i) {
