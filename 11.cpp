@@ -8,10 +8,10 @@ int main(int argc, char** argv) {
   int year;
   std::cin >> year;
 
-  if (year%4 != 0) {
+  if (year % 4 != 0) {
   	std::cout << "no" << std::endl;
   } else {
-  	if (year%100 == 0 && year%400 != 0) {
+  	if (year % 100 == 0 && year % 400 != 0) {
   		std::cout << "no" << std::endl;
   	} else {
   	  std::cout << "yes" << std::endl;
