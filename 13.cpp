@@ -2,23 +2,54 @@
 #include <cmath>
 #include <cstdio>
 #include "logger.h"
-using namespace std;
 
-int day_of_week(int day,int month,int year)
-  {
-    unsigned long tmp,res;
-
-    if(month>2)
-      month++;
-    else {
-      month+=13;
-      year-=1;
-    }
-    tmp=floor(365.25*year)+floor(30.6*month)+day-621050;
-    res=tmp-floor(tmp/7)*7+1;
-
-    return res;
+/*
+Нужно задать начальную дату. Считается, что 01.01.1800 - это среда.
+*/
+int leapYear(int year) {
+  if (year % 4 != 0) {
+    return 0;
+  } else {
+    if (year % 100 == 0 && year % 400 != 0) {
+      return 0;
+    } else {
+      return 1;
+    } 
   }
+}
+
+int dayOfWeek(int day,int month,int year) {
+  unsigned long tmp,res;
+  int months[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  int leep_months[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  char days[7][10] = {"Monday", "Tuesday", "Wednesday", "Thuesday", "Friday", "Saturday", "Sunday"};
+  
+  //-----------------------------------------------
+  //01.01.1800 is Wednesday
+  int start_year = 1800;
+  int start_month = 1;
+  int start_day = 1;
+
+  tmp = 2;
+  //-----------------------------------------------
+
+  for ( int i = start_year; i < year; ++i ) {
+    tmp += 365 + leapYear(i);  
+  }
+
+  int leap_year = leapYear(year);
+  for ( int i = 0; i < month - 1; ++i ) {
+    if (leap_year) {
+      tmp += leep_months[i];
+    } else {
+      tmp += months[i];
+    }
+  }
+
+  res = (tmp + day) % 7; 
+
+  return res;
+}
 
 int main(int argc, char** argv) {
   DBG("[Lesson 1]: 13");
@@ -26,21 +57,22 @@ int main(int argc, char** argv) {
   int res,day,month,year;
   char run; 
      
-  cout << "Enter the year: ";  cin>>year;
-  cout << "Enter the month: "; cin>>month;
-  cout << "Enter the day: ";   cin>>day;
+  std::cout << "Enter the year: ";  std::cin >> year;
+  std::cout << "Enter the month: "; std::cin >> month;
+  std::cout << "Enter the day: ";   std::cin >> day;
 
-  res=day_of_week(day,month,year);
+  res=dayOfWeek(day,month,year);
 
   switch(res) {
-    case 1: cout<<endl << "This day is Monday"   << endl; break;
-    case 2: cout<<endl << "This day is Tuesday"  << endl; break;
-    case 3: cout<<endl << "This day is Wednesday" << endl; break;
-    case 4: cout<<endl << "This day is Thursday" << endl; break;
-    case 5: cout<<endl << "This day is Friday"   << endl; break;
-    case 6: cout<<endl << "This day is Saturday" << endl; break;
-    case 7: cout<<endl << "This day is Sunday"   << endl; break;
+    case 0: std::cout << std::endl << "This day is Sunday"   << std::endl; break;
+    case 1: std::cout << std::endl << "This day is Monday"   << std::endl; break;
+    case 2: std::cout << std::endl << "This day is Tuesday"  << std::endl; break;
+    case 3: std::cout << std::endl << "This day is Wednesday" << std::endl; break;
+    case 4: std::cout << std::endl << "This day is Thursday" << std::endl; break;
+    case 5: std::cout << std::endl << "This day is Friday"   << std::endl; break;
+    case 6: std::cout << std::endl << "This day is Saturday" << std::endl; break;
   }
+
   DBG("[Lesson 1]: 13 [END]");
   return 0;
 }
