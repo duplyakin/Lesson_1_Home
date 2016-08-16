@@ -18,21 +18,21 @@ int leapYear(int year) {
   }
 }
 
-int dayOfWeek(int day,int month,int year) {
-  unsigned long tmp,res;
+//-----------------------------------------------
+//01.01.1800 is Wednesday
+int start_year = 1800;
+int start_month = 1;
+int start_day = 1;
+
+unsigned long tmp = 2;
+//-----------------------------------------------
+
+int dayOfWeekPlus(int day,int month,int year) {
+  unsigned long res;
   int months[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
   int leep_months[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
   char days[7][10] = {"Monday", "Tuesday", "Wednesday", "Thuesday", "Friday", "Saturday", "Sunday"};
   
-  //-----------------------------------------------
-  //01.01.1800 is Wednesday
-  int start_year = 1800;
-  int start_month = 1;
-  int start_day = 1;
-
-  tmp = 2;
-  //-----------------------------------------------
-
   for ( int i = start_year; i < year; ++i ) {
     tmp += 365 + leapYear(i);  
   }
@@ -51,6 +51,30 @@ int dayOfWeek(int day,int month,int year) {
   return res;
 }
 
+int dayOfWeekMinus(int day,int month,int year) {
+  unsigned long res;
+  int months[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  int leep_months[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  char days[7][10] = {"Monday", "Tuesday", "Wednesday", "Thuesday", "Friday", "Saturday", "Sunday"};
+  
+  for ( int i = start_year; i < year; ++i ) {
+    tmp -= 365 + leapYear(i);  
+  }
+
+  int leap_year = leapYear(year);
+  for ( int i = 0; i < month - 1; ++i ) {
+    if (leap_year) {
+      tmp -= leep_months[i];
+    } else {
+      tmp -= months[i];
+    }
+  }
+
+  res = (tmp + day) % 7; 
+
+  return res;
+}
+
 int main(int argc, char** argv) {
   DBG("[Lesson 1]: 13");
 
@@ -61,7 +85,13 @@ int main(int argc, char** argv) {
   std::cout << "Enter the month: "; std::cin >> month;
   std::cout << "Enter the day: ";   std::cin >> day;
 
-  res=dayOfWeek(day,month,year);
+  if (year < start_year) {
+    res = dayOfWeekMinus(day,month,year);
+  } else {
+    res = dayOfWeekPlus(day,month,year);
+  }
+
+  dayOfWeekPlus(day,month,year);
 
   switch(res) {
     case 0: std::cout << std::endl << "This day is Sunday"   << std::endl; break;
